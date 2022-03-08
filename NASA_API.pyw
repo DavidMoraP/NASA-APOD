@@ -1,25 +1,33 @@
 import requests
 import ctypes
 
+
 class Wallpaper:
     def __init__(self, path):
         ctypes.windll.user32.SystemParametersInfoW(20, 0, path, 0)
 
-# requesting data from API link
-response = requests.get("https://api.nasa.gov/planetary/apod?api_key=SIcyYtjr7ewrzHp76MfMghQGVtsNf1TlShsdIyNb")
 
-# turning data into json file and extracting values from keys hdurl and date
-hdurl = response.json()['hdurl']
-date = response.json()['date'].replace('-','_')
+def main():
+    # requesting data from API link
+    raw_response = requests.get("https://api.nasa.gov/planetary/apod?api_key=SIcyYtjr7ewrzHp76MfMghQGVtsNf1TlShsdIyNb")
 
-# requesting data from hdurl
-image_data = requests.get(hdurl)
+    # turning data into json file and extracting values from keys hdurl and date
+    json_response = raw_response.json()
+    hdurl = json_response['hdurl']
+    date = json_response['date'].replace('-','_')
 
-# creating path and name of image
-image_path = 'E:/Theseus/Pictures/NASA_APOD/%s_NASA_APOD.png' %date
+    # requesting data from hdurl
+    image_data = requests.get(hdurl)
 
-# saving data from hdurl into a png file
-with open(image_path, 'wb') as f:
-    f.write(image_data.content)
+    # creating path and name of image
+    image_path = 'E:/Theseus/Pictures/NASA_APOD/%s_NASA_APOD.png' %date
 
-wallpaper_change = Wallpaper(image_path)
+    # saving data from hdurl into a png file
+    with open(image_path, 'wb') as f:
+        f.write(image_data.content)
+
+    Wallpaper(image_path)
+
+
+if __name__ == '__main__':
+    main()
