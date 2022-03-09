@@ -1,5 +1,6 @@
 import requests
 import ctypes
+import pathlib
 
 
 class Wallpaper:
@@ -20,7 +21,8 @@ def main():
     image_data = requests.get(hdurl)
 
     # creating path and name of image
-    image_path = 'E:/Theseus/Pictures/NASA_APOD/%s_NASA_APOD.png' %date
+    current_dir = str(pathlib.Path(__file__).parent.resolve())
+    image_path = current_dir + '/APOD_images/%s_NASA_APOD.png' %date
 
     # saving data from hdurl into a png file
     with open(image_path, 'wb') as f:
