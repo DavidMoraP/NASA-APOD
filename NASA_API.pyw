@@ -1,6 +1,7 @@
 import requests
 import ctypes
 import pathlib
+import os
 
 
 class Wallpaper:
@@ -20,13 +21,18 @@ def main():
     # requesting data from hdurl
     image_data = requests.get(hdurl)
 
-    # creating path and name of image
-    current_dir = str(pathlib.Path(__file__).parent.resolve())
-    image_path = current_dir + '/APOD_images/%s_NASA_APOD.png' %date
-
-    # saving data from hdurl into a png file
-    with open(image_path, 'wb') as f:
-        f.write(image_data.content)
+    # creating path and name of image, and saving data from hdurl into a png file 
+    try:
+        current_dir = str(pathlib.Path(__file__).parent.resolve())
+        image_path = current_dir + '/APOD_images/%s_NASA_APOD.png' %date
+        with open(image_path, 'wb') as f:
+            f.write(image_data.content)
+    except:
+        path = os.path.join(current_dir, "APOD_images") 
+        os.mkdir(path)
+        image_path = current_dir + '/APOD_images/%s_NASA_APOD.png' %date
+        with open(image_path, 'wb') as f:
+            f.write(image_data.content)
 
     Wallpaper(image_path)
 
